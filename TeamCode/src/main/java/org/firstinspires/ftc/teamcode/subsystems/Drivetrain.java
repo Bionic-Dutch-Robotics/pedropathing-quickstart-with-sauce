@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.followerConstants;
+import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.startPose;
 
 @SuppressWarnings("all")
 public class Drivetrain {
@@ -21,12 +22,9 @@ public class Drivetrain {
     private PIDFController headingPid;
     public Follower follower;
     private Gamepad gamepad1;
-/* Mohit
-    public Pose position = new Pose();
-    public Pose drivePower = new Pose();
-    public Vector velocity = new Vector();
-*/
+
     public Pose position;
+    public Pose drivePower;
     public Vector velocity;
     public final Pose RED_GOAL = new Pose(144, 144, 0);
     public final Pose BLUE_GOAL = new Pose(0, 144, 0);
@@ -45,7 +43,7 @@ public class Drivetrain {
 
         headingPid = new PIDFController(followerConstants.coefficientsHeadingPIDF);
 
-        position = new Pose(startingPose.getX(),startingPose.getY()); //Mohit
+        position = new Pose(startingPose.getX(), startPose.getY(), startingPose.getHeading()); //Mohit
         velocity = new Vector(); //Mohit
 
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
@@ -53,13 +51,44 @@ public class Drivetrain {
         }
     }
 
+    public Drivetrain createDrivetrain(Gamepad gamepad1, HardwareMap hardwareMap, Pose startingPose) {
+        try {
+            return new Drivetrain(gamepad1, hardwareMap, startingPose);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Drive the Follower
+     * @param power         Movement vector, Y forward, X strafe
+     * @param isRobotCentric  Should the robot drive robot centric or field centric?
+     */
+    public void drive(Pose power, boolean isRobotCentric) {
+        follower.setTeleOpDrive (
+                power.getY(),
+                power.getX(),
+                power.getHeading(),
+                isRobotCentric
+        );
+    }
+
     /**
      * Orbits the drivetrain around the selected goal
      * @param posMultiplier Position control coefficient. 1 is full speed, 0 is bricked.
+     * @param goal          Target to orbit around
      */
     private void orbit(double posMultiplier, Pose goal) {
         headingPid.updatePosition(position.getHeading());
         headingPid.setTargetPosition(calculateRobotCentricTargetHeading(goal));
+        drive( new Pose(
+                    gamepad1.left_stick_x * posMultiplier,
+                    gamepad1.left_stick_y * posMultiplier,
+                        headingPid.run()
+                        ),
+                false
+        );
         follower.setTeleOpDrive(
                 -gamepad1.left_stick_y * posMultiplier,
                 gamepad1.left_stick_x * posMultiplier,
@@ -81,6 +110,7 @@ public class Drivetrain {
     public void startTeleOpDrive(boolean brake) {
         follower.startTeleopDrive(brake);
     }
+
     /**
      * Drives a robot Field-Centric
      * @param driveCoefficient  Speed coefficient. 1 is full speed, 0 is bricked.
