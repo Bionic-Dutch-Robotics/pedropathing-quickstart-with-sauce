@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.followerConstants;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.startPose;
 
+import androidx.annotation.NonNull;
+
 @SuppressWarnings("all")
 public class Drivetrain {
     private final FilteredPIDFController xPid = new
@@ -118,9 +120,9 @@ drivePower.getHeading());
     is bricked.
      * @param isAutoOrienting   Toggle Orbit
      */
-    public void runTeleOpDrive(double forwardPower, double strafePower, double turnPower,
+    public void runTeleOpDrive(@NonNull double forwardPower, @NonNull double strafePower, @NonNull double turnPower,
                                double driveCoefficient, boolean isAutoOrienting, Pose orbitTarget,
-                                Gamepad gamepad) {
+                               @NonNull Gamepad gamepad) {
         // TODO: Remove vector inputs, rely on gamepad. Testing needed.
         if (!isAutoOrienting)
         {

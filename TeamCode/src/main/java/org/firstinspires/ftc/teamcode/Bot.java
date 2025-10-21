@@ -44,9 +44,10 @@ public class Bot {
      * Runs the Drivetrain and Follower for TeleOp
      */
     public void drivetrain(boolean orbit, Gamepad gamepad) {
+        dt.update();
         dt.runTeleOpDrive(
                 -gamepad.left_stick_y,     //  Forward
-                gamepad.left_stick_x,      //  Strafe
+                -gamepad.left_stick_x,      //  Strafe
                 gamepad.right_stick_x,      //  Rotation
                 0.5,                        //  Drive Power Relative to Input
                 orbit,                      //  Boolean: Should the robot orbit around the goal?
@@ -57,7 +58,5 @@ public class Bot {
         if (gamepad.aWasPressed()) {       //Toggle orbit
             orbit = !orbit;
         }
-
-        dt.update();
     }
 }
