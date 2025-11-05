@@ -4,6 +4,7 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+
 import java.util.List;
 
 
@@ -31,5 +32,10 @@ public class TeleKorver extends OpMode {
     @Override
     public void loop () {
         bot.drivetrain(gamepad1);
+        bot.dt.update();
+        telemetry.addData("Bot X:", bot.dt.follower.getPose().getX());
+        telemetry.addData("Bot Y:", bot.dt.follower.getPose().getY());
+        telemetry.addData("Bot Theta: ", bot.dt.follower.getPose().getHeading());
+        telemetry.update();
     }
 }

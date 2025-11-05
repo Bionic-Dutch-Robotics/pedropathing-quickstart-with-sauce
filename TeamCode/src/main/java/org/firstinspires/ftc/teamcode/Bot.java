@@ -59,10 +59,11 @@ public class Bot {
 
         if (!goTo) {
             dt.runTeleOpDrive(
-                    gamepad.left_stick_y,     //  Forward
+                    -gamepad.left_stick_y,     //  Forward
                     gamepad.left_stick_x,      //  Strafe
                     gamepad.right_stick_x,      //  Rotation
                     0.5,                        //  Drive Power Relative to Input
+                    0.05,
                     orbit,                      //  Boolean: Should the robot orbit around the goal?
                     dt.RED_GOAL,                 //  Pose object indicating where to orbit around
                     gamepad
@@ -80,6 +81,7 @@ public class Bot {
                         0,
                         0,
                         0,
+                        0.05,
                         false,
                         dt.RED_GOAL,
                         gamepad

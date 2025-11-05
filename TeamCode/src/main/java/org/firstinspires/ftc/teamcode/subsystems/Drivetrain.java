@@ -31,7 +31,7 @@ public class Drivetrain {
     public Vector velocity;
     public final Pose RED_GOAL = new Pose(144, 144);
     public final Pose BLUE_GOAL = new Pose(0, 144);
-    public final Pose RED_PICK_POS = new Pose(125, 125, Math.PI / 2);
+    public final Pose RED_PICK_POS = new Pose(77, 77, Math.PI / 2);
     public final Pose BLUE_PICK_POS = new Pose(15, 125, Math.PI * 1.5);
 
     /**
@@ -43,7 +43,6 @@ public class Drivetrain {
      */
     public Drivetrain(Gamepad gamepad, HardwareMap hardwareMap, Pose startingPose)
     {
-        //this.gamepad1 = gamepad;
         this.follower = Constants.createFollower(hardwareMap);
         this.follower.setStartingPose(startingPose);
         this.follower.update();
@@ -122,7 +121,7 @@ drivePower.getHeading());
     is bricked.
      * @param isAutoOrienting   Toggle Orbit
      */
-    public void runTeleOpDrive(@NonNull double forwardPower, @NonNull double strafePower, @NonNull double turnPower,
+    public void runTeleOpDrive(@NonNull double forwardPower, @NonNull double strafePower, @NonNull double turnPower, double threshold,
                                double driveCoefficient, boolean isAutoOrienting, Pose orbitTarget,
                                @NonNull Gamepad gamepad) {
         // TODO: Remove vector inputs, rely on gamepad. Testing needed.

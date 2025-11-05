@@ -3,9 +3,13 @@ package org.firstinspires.ftc.teamcode;
 
 import static android.os.SystemClock.sleep;
 
+import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.HeadingInterpolator;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -18,9 +22,10 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.util.DataLogger;
 
 import java.lang.Exception;
+import java.util.function.Supplier;
 
 @SuppressWarnings("all")
-public class Bot {
+public class FirstMeetBot {
     //public Gamepad gamepad1;
     public boolean orbit;
     public Drivetrain dt;
@@ -34,7 +39,7 @@ public class Bot {
      * @param gamepad1  takes `gamepad1` or `gamepad2`
      * @param hardwareMap   takes `hardwareMap`
      */
-    public Bot(Gamepad gamepad, HardwareMap hwMap) throws Exception{
+    public FirstMeetBot(Gamepad gamepad, HardwareMap hwMap) throws Exception{
         try {
             dt = new Drivetrain(gamepad, hwMap, Constants.startPose);
             dt.update();
@@ -51,9 +56,9 @@ public class Bot {
         goTo = false;
         shootPath = new Path();
 
-        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
-                .addPath(new Path(new BezierLine(follower::getPose, bot.dt.RED_PICK_POS)))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, bot.dt.RED_PICK_POS.getHeading()))
+        pathChain = () -> dt.follower.pathBuilder() //Lazy Curve Generation
+                .addPath(new Path(new BezierLine(dt.follower::getPose, dt.RED_PICK_POS)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(dt.follower::getHeading, dt.RED_PICK_POS.getHeading(), 0.8))
                 .build();
     }
 
@@ -68,24 +73,25 @@ public class Bot {
                     gamepad.left_stick_y,     //  Forward
                     gamepad.left_stick_x,      //  Strafe
                     gamepad.right_stick_x,      //  Rotation
-                    0.5,                        //  Drive Power Relative to Input
+                    0.05,                        //  Drive Power Relative to Input
+                    0.9,
                     orbit,                      //  Boolean: Should the robot orbit around the goal?
                     dt.RED_GOAL,                 //  Pose object indicating where to orbit around
                     gamepad
             );
         }
         else if (goTo) {
-            toShootPos(gamepad);
+            toShootPos(shootPath);
         }
 
         if (gamepad.aWasPressed()) {       //Toggle goTo
 
             if (goTo) {
-                follower.breakFollowing();
+                dt.follower.breakFollowing();
                 dt.follower.startTeleopDrive(true);
             }
             else {
-                follower.followPath(pathChain.get());
+                dt.follower.followPath(pathChain.get());
             }
             goTo = !goTo;
         }
