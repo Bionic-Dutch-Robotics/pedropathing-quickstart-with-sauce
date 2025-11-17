@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 
 import java.util.function.Supplier;
 
@@ -27,7 +28,8 @@ public class TestBenchBot {
     public Intake intake;
     public static ShotPos shotPos;
     boolean runIntake;
-    Shooter shooter;
+    public Shooter shooter;
+    public Transfer transfer;
     boolean runShooter;
     private PIDFCoefficients shooterCoefficients;
     double forwardPower, strafePower, turnPower;
@@ -118,10 +120,10 @@ public class TestBenchBot {
 
     public void shooter(Gamepad gp) {
         if (gp.dpad_left) {
-            shooter.reload();
+            transfer.reload();
         }
         else {
-            shooter.transfer();
+            transfer.feed();
         }
 
 
@@ -130,7 +132,7 @@ public class TestBenchBot {
         }
 
         if (runShooter) {
-            shooter.lob();
+            shooter.shootFar();
             shotPos = ShotPos.FAR;
         }
         else if (gp.x) {

@@ -24,7 +24,7 @@ public class Shooter {
         shooterPidf = new PIDFController(shooterCoefficients);
         shooter = hwMap.get(DcMotorEx.class, HardwareNames.Shooter.SHOOTER);
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
+        shooterState = ShooterState.IDLE;
         stop = true;
     }
 
