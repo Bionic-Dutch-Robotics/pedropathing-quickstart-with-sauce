@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -8,14 +9,14 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.pedropathing.control.PIDFCoefficients;
+
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 import java.util.function.Supplier;
 
-public class BOTT {
+public class TestBenchBot {
 
     public enum ShotPos {
         FAR,
@@ -28,17 +29,18 @@ public class BOTT {
     boolean runIntake;
     Shooter shooter;
     boolean runShooter;
-    private final PIDFCoefficients shooterCoefficients = new PIDFCoefficients(0.09, 0.0, 0.01, 0.0);
+    private PIDFCoefficients shooterCoefficients;
     double forwardPower, strafePower, turnPower;
     private boolean goTo;
     private Supplier<PathChain> pathChain;
-    public BOTT(HardwareMap hwMap) {
+    public TestBenchBot(HardwareMap hwMap) {
         fw = Constants.createFollower(hwMap);
         fw.setStartingPose(
                 new Pose(8,8,Math.PI/2)
         );
 
         intake = new Intake(hwMap);
+        shooterCoefficients = new PIDFCoefficients(0.09, 0.0, 0.01, 0.0);
         shooter = new Shooter(hwMap, shooterCoefficients);
 
         fw.startTeleopDrive(true);
@@ -65,12 +67,12 @@ public class BOTT {
                 forwardPower = 0;
             }
 
-            strafePower = gp.left_stick_x;
+            strafePower = -gp.left_stick_x;
             if (Math.abs(strafePower) < 0.05) {
                 strafePower = 0;
             }
 
-            turnPower = gp.right_stick_x;
+            turnPower = -gp.right_stick_x;
             if (Math.abs(turnPower) < 0.05) {
                 turnPower = 0;
             }
@@ -84,13 +86,12 @@ public class BOTT {
             );
         }
 
-        if (gp.aWasPressed()) {
+        if (gp.dpadUpWasPressed()) {
             if (goTo) {
                 fw.breakFollowing();
                 fw.startTeleopDrive(true);
             }
             else {
-
                 fw.followPath(pathChain.get());
             }
 
@@ -116,7 +117,7 @@ public class BOTT {
     }
 
     public void shooter(Gamepad gp) {
-        if (gp.dpad_up) {
+        if (gp.dpad_left) {
             shooter.reload();
         }
         else {

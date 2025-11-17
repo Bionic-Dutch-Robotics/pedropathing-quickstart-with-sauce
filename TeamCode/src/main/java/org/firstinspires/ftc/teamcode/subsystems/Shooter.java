@@ -1,17 +1,28 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.PIDFController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
+
 public class Shooter {
+    private PIDFCoefficients shooterCoefficients = null;
+    private PIDFController shooterPid = null;
     public DcMotorEx shooter = null;
     public Servo transfer = null;
-    public Shooter (HardwareMap hwMap) {
+    public Shooter (HardwareMap hwMap, PIDFCoefficients shooterCoefficients) {
         shooter = hwMap.get(DcMotorEx.class, "shooter");
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         transfer = hwMap.get(Servo.class, "push");
+
+        this.shooterCoefficients = shooterCoefficients;
+        shooterPid = new PIDFController(shooterCoefficients);
+
     }
 
     public void shoot() {
@@ -30,7 +41,7 @@ public class Shooter {
     }
 
     public void lob() {
-        shooter.setPower(0.525);
+        shooter.setVelocity(120, AngleUnit.DEGREES);
     }
 
     public void transfer() {

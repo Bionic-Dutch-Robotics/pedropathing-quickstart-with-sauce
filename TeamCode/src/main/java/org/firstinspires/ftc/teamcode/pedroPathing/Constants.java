@@ -23,15 +23,22 @@ public class Constants {
     
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(8)
-            .forwardZeroPowerAcceleration(-25.9346931313679598)
-            .lateralZeroPowerAcceleration(-67.342491844080064)
+            .forwardZeroPowerAcceleration(-41.36529811151215)
+            .lateralZeroPowerAcceleration(-53.76135527463098)
             .translationalPIDFCoefficients(new PIDFCoefficients(
-                    0.03,
+                    0.1,
                     0,
-                    0,
-                    0.015
+                    0.01,
+                    0
             ))
             .translationalPIDFSwitch(4)
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(
+                    0.1,
+                    0,
+                    0.01,
+                    0,
+                    0
+            ))
             .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(
                     0.4,
                     0,
@@ -65,19 +72,24 @@ public class Constants {
                     0.01
             ))
             .drivePIDFSwitch(15)
-            .centripetalScaling(0.0005);
+            .centripetalScaling(0.0005)
+            .useSecondaryDrivePIDF(false)
+            .useSecondaryHeadingPIDF(false)
+            .useSecondaryTranslationalPIDF(false);
 
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
+            .xVelocity(61.099649264117865)
+            .yVelocity(48.879322442482774)
             .leftFrontMotorName("frontLeft")
             .leftRearMotorName("backLeft")
             .rightFrontMotorName("frontRight")
             .rightRearMotorName("backRight")
-            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
+            .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
                 .distanceUnit(DistanceUnit.INCH)

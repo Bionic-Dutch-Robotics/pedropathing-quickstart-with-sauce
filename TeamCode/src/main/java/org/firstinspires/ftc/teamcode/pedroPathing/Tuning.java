@@ -151,7 +151,7 @@ class LocalizationTest extends OpMode {
      */
     @Override
     public void loop() {
-        follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
+        follower.setTeleOpDrive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, true);
         follower.update();
 
         telemetryM.debug("x:" + follower.getPose().getX());
@@ -272,7 +272,7 @@ class LateralTuner extends OpMode {
  * @version 1.0, 5/6/2024
  */
 class TurnTuner extends OpMode {
-    public static double ANGLE = 2 * Math.PI;
+    public static double ANGLE = 0.5 * Math.PI;
 
     @Override
     public void init() {
