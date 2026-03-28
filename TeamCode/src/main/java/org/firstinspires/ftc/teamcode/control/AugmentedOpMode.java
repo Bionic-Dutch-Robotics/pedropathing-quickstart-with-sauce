@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.control;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.subsystems.Subsystem;
-import org.firstinspires.ftc.teamcode.util.AllianceColor;
+import org.firstinspires.ftc.teamcode.util.field.AllianceColor;
 
 public abstract class AugmentedOpMode extends OpMode {
     private Subsystem[] subsystems;
