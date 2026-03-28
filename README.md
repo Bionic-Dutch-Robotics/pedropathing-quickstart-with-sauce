@@ -1,6 +1,6 @@
 ## Contributors
-@agurnani  
-@chetanvanam
+* [Atharv G](@agurnani)
+* [Chetan V](@chetanvanam)
 
 
 ## Tools:
